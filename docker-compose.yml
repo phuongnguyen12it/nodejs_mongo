@@ -1,0 +1,48 @@
+# https://www.bezkoder.com/docker-compose-nodejs-mongodb/
+version: '3'
+
+services:
+  app:
+    container_name: app
+    depends_on:
+      - mongodb
+    build: .
+    command: npm start
+    restart: unless-stopped
+    # env_file: .env
+    ports:
+      - 8081:8080
+    environment:
+      - DB_HOST=mongodb
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=db_mg
+      - DB_PORT=27017
+    volumes:
+      - ./src:/src
+    stdin_open: true
+    tty: true
+  mongodb:
+    container_name: mongodb
+    image: mongo:5.0.2
+    restart: unless-stopped
+    # env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+  mongo-express:
+    container_name: mg_express
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 8000:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongodb:27017/
+volumes:
+  db:
