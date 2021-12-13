@@ -1,4 +1,5 @@
 # https://www.bezkoder.com/docker-compose-nodejs-mongodb/
+# https://blog.logrocket.com/building-structuring-node-js-mvc-application/
 version: '3'
 
 services:
@@ -7,7 +8,7 @@ services:
     depends_on:
       - mongodb
     build: .
-    command: npm start
+    # command: npm start
     restart: unless-stopped
     # env_file: .env
     ports:

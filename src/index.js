@@ -1,31 +1,15 @@
+// https://blog.logrocket.com/building-structuring-node-js-mvc-application/
 require("dotenv").config();
-const express = require('express')
-const dbConfig = require("../src/app/config/db.config");
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const logger = require('morgan');
-const mainRoutes = require("./app/routes/routes");
+const express = require('express');
+const app = express();
 
-//Define request response in root URL (/)
-const app = express()
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(logger('dev'));
+app.set('view engine', 'ejs');
 
-// set up mongoose
-mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(()=> {
-    console.log('Database connected');
-  }).catch((error)=> {
-    console.log('Error connecting to database');
-  }) ;
+// Route
+app.use('/', require('./app/routes/login'));
 
-// set up route
-app.use('/api/', mainRoutes);
-
-//Launch listening server on port 8080
-const PORT = process.env.NODE_DOCKER_PORT || 8080;
-console.log(process.env.NODE_DOCKER_PORT);
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+//listen server
+app.listen(process.env.NODE_DOCKER_PORT|| 8080, () => {
+  console.log(`Server is running on port ${process.env.NODE_DOCKER_PORT}.`);
+  console.log(express.Router());
 });
